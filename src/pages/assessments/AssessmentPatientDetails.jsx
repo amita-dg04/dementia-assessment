@@ -3,20 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import { Calendar } from 'lucide-react';
 import axios from 'axios';
 
+// This is assigning data to variables that we can use ehre
 const AssessmentPatientDetails = () => {
   const navigate = useNavigate();
   const [birthDate, setBirthDate] = useState({ day: '', month: '', year: '' });
   const [sex, setSex] = useState('');
   const [age, setAge] = useState('');
-  const [patientType, setPatientType] = useState(''); // State for patient type
+  const [patientType, setPatientType] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [error, setError] = useState('');
 
-  // Fetch patientType from localStorage on component mount
+  // This gets patient type from local storage; defaults to myself
   useEffect(() => {
     const type = localStorage.getItem('patientType');
-    setPatientType(type || 'myself'); // Default to "myself" if no value is found
+    setPatientType(type || 'myself');
   }, []);
 
-  // Calculate age whenever birthDate changes
+  // This helps calculate the running age based on user input
   useEffect(() => {
     if (birthDate.day && birthDate.month && birthDate.year) {
       const birthDateObj = new Date(birthDate.year, birthDate.month - 1, birthDate.day);
@@ -42,40 +46,89 @@ const AssessmentPatientDetails = () => {
     }
   }, [birthDate]);
 
+  // Once next is clicked, it sends the data to the backend
   const handleNext = async () => {
-    if (birthDate.day && birthDate.month && birthDate.year && sex) {
-      // Combine all data to send to the backend
-      const patientData = {
-        patient_type: patientType,
-        birth_date: `${birthDate.year}-${birthDate.month}-${birthDate.day}`,
-        sex,
-      };
+    setError(''); // Clear any previous errors
+    
+    // Trim the values first
+    const trimmedFirstName = firstName.trim();
+    const trimmedLastName = lastName.trim();
+  
+    // Formats birthdate to have 2 digits for day/month and keeps the 4 digits for year
+    const formattedDay = birthDate.day.padStart(2, '0');
+    const formattedMonth = birthDate.month.padStart(2, '0');
+    const formattedDate = `${birthDate.year}-${formattedMonth}-${formattedDay}`;
+  
+    // THE PACKET
+    const patientData = {
+      first_name: trimmedFirstName,
+      last_name: trimmedLastName,
+      patient_type: patientType || 'myself', // Provide default
+      birth_date: formattedDate,
+      sex: sex
+    };
 
-      try {
-        // Send data to the backend
-        const response = await axios.post('http://localhost:4000/store_patient', patientData);
-        console.log('Sending to backend:', patientData);
-        const id = response.data.id;
-
-        // Save the assessment ID for later use
-        localStorage.setItem('assessmentId', id);
-
-        // Navigate to the next step
-        navigate('/assessment/begin');
-      } catch (error) {
-        console.error('Error saving patient data:', error);
+    // Then modify your axios call to include better error handling
+    try {
+      const response = await axios.post('http://localhost:4000/store_patient', patientData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.data && response.data.id) {
+        localStorage.setItem('assessmentId', response.data.id);
+        navigate('/assessment/begin'); // WHERE TO GO NEXT
+      } else {
+        console.error('Invalid server response:', response);
+        setError('Invalid server response');
       }
+    } catch (error) {
+      console.error('Full error object:', error);
+      console.error('Error response data:', error.response?.data);
+      console.error('Original patient data sent:', patientData);
+      setError(error.response?.data?.error || 'Error saving patient data. Please try again.');
     }
-  };
+};
 
   return (
     <div className="space-y-8">
+      {error && (
+        <div className="p-4 bg-red-100 text-red-700 rounded-lg">
+          {error}
+        </div>
+      )}
+
+      {/* First and Last Name */}
+      <div>
+        <h1 className="text-3xl font-bold text-navy-900 mb-8">
+          What is {patientType === 'myself' ? 'your' : 'their'} name?
+        </h1>
+        <div className="flex space-x-4">
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            className="flex-1 p-4 border-2 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500"
+            placeholder="First Name"
+            required
+          />
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className="flex-1 p-4 border-2 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500"
+            placeholder="Last Name"
+            required
+          />
+        </div>
+      </div>
+
       {/* Sex Selection */}
       <div>
         <h1 className="text-3xl font-bold text-navy-900 mb-8">
           What sex was originally listed on {patientType === 'myself' ? 'your' : 'their'} birth certificate?
         </h1>
-
         <div className="grid grid-cols-2 gap-6">
           {['Female', 'Male'].map((option) => (
             <button
@@ -103,7 +156,6 @@ const AssessmentPatientDetails = () => {
         <h2 className="text-3xl font-bold text-navy-900 mb-8">
           What is {patientType === 'myself' ? 'your' : 'their'} date of birth?
         </h2>
-        
         <div className="flex space-x-4 items-start">
           <div className="space-y-2">
             <label className="block text-gray-600">Day</label>
@@ -114,9 +166,9 @@ const AssessmentPatientDetails = () => {
               onChange={(e) => setBirthDate({ ...birthDate, day: e.target.value })}
               className="w-24 p-4 border-2 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500"
               placeholder="07"
+              required
             />
           </div>
-          
           <div className="space-y-2">
             <label className="block text-gray-600">Month</label>
             <input
@@ -126,9 +178,9 @@ const AssessmentPatientDetails = () => {
               onChange={(e) => setBirthDate({ ...birthDate, month: e.target.value })}
               className="w-24 p-4 border-2 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500"
               placeholder="03"
+              required
             />
           </div>
-          
           <div className="space-y-2">
             <label className="block text-gray-600">Year</label>
             <input
@@ -138,19 +190,12 @@ const AssessmentPatientDetails = () => {
               onChange={(e) => setBirthDate({ ...birthDate, year: e.target.value })}
               className="w-32 p-4 border-2 rounded-lg text-lg focus:border-blue-500 focus:ring-blue-500"
               placeholder="2021"
+              required
             />
           </div>
-
-          <button className="mt-8 p-4 rounded-full bg-white border-2 border-gray-200 hover:border-blue-200">
-            <Calendar className="w-6 h-6 text-blue-500" />
-          </button>
         </div>
-
         {age && (
-          <div className="mt-4 p-4 bg-green-50 text-green-800 rounded-lg flex items-center">
-            <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mr-3">
-              ✓
-            </div>
+          <div className="mt-4 p-4 bg-green-50 text-green-800 rounded-lg">
             {age}
           </div>
         )}
@@ -166,21 +211,14 @@ const AssessmentPatientDetails = () => {
         </button>
         <button
           onClick={handleNext}
-          disabled={!birthDate.day || !birthDate.month || !birthDate.year || !sex}
+          disabled={!firstName || !lastName || !birthDate.day || !birthDate.month || !birthDate.year || !sex}
           className={`px-8 py-3 rounded-full font-medium transition-colors ${
-            birthDate.day && birthDate.month && birthDate.year && sex
+            firstName && lastName && birthDate.day && birthDate.month && birthDate.year && sex
               ? 'bg-blue-500 text-white hover:bg-blue-600'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed'
           }`}
         >
           Next
-        </button>
-      </div>
-
-      {/* Report Issue Button */}
-      <div className="mt-8">
-        <button className="text-blue-500 text-sm hover:underline">
-          Report an issue with this question
         </button>
       </div>
     </div>
