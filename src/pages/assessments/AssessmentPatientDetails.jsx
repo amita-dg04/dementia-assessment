@@ -91,6 +91,7 @@ const AssessmentPatientDetails = () => {
     }
 };
 
+// FRONT END COMPONENTS
   return (
     <div className="space-y-8">
       {error && (
