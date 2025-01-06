@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Section1 = () => {
 
@@ -10,6 +11,7 @@ const Section1 = () => {
   const [dateInput, setDateInput] = useState({ day: '', month: '' });
   const [timeLeft, setTimeLeft] = useState(10);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [assessmentId, setAssessmentId] = useState(null);
 
   // CONSTANTS FOR DROPDOWNS
   const seasons = ['Winter', 'Spring', 'Summer', 'Autumn'];
@@ -90,6 +92,14 @@ const Section1 = () => {
     return () => clearInterval(timer);
   }, [currentQuestion]);
 
+  // GETS ASSESSMENTID FROM LOCAL STORAGE!!
+  useEffect(() => {
+    const id = localStorage.getItem('assessmentId');
+    if (id) {
+      setAssessmentId(parseInt(id));
+    }
+  }, []);
+
   const handleDateChange = (field, value) => {
     setDateInput(prev => ({
       ...prev,
@@ -111,24 +121,38 @@ const Section1 = () => {
     }
 
     const isCorrect = questions[currentQuestion].validate(answer);
+    const responseTime = (10 - timeLeft) * 1000;
+
+    // Format the answer if it's a date input
+    const formattedAnswer = questions[currentQuestion].type === 'date-input' 
+      ? `${answer.day}/${answer.month}`
+      : answer;
+
+    const responseData = {
+      assessment_id: assessmentId,
+      section_number: 1,
+      question_number: currentQuestion + 1,
+      user_response: formattedAnswer.toString(),
+      is_correct: isCorrect,
+      response_time: responseTime
+    };
 
     try {
+      // Add a small delay to simulate processing
       await new Promise((resolve) => setTimeout(resolve, 500));
+      
+      // Make the API call
+      const response = await axios.post('http://localhost:4000/store_section_response', responseData);
+      console.log('Response stored successfully:', response.data);
 
-      console.log('Stored response:', {
-        section_number: 1,
-        question_number: currentQuestion + 1,
-        user_response: answer,
-        is_correct: isCorrect,
-        response_time: (10 - timeLeft) * 1000,
-      });
-
+      // Only update the state once after successful submission
       setUserAnswer('');
       setDateInput({ day: '', month: '' });
       setTimeLeft(10);
       setCurrentQuestion((prev) => prev + 1);
     } catch (error) {
-      console.error('Error saving response (simulated):', error);
+      console.error('Error storing response:', error.response?.data || error.message);
+      // Optionally show error to user here
     } finally {
       setIsSubmitting(false);
     }
