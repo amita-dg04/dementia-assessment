@@ -51,7 +51,7 @@ const Section3 = () => {
   }, []);
 
   const handleNext = () => {
-    navigate("/assessment/section4");
+    navigate("/assessment/section4", { state: { selectedWords } });
   };
 
   return (

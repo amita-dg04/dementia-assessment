@@ -12,6 +12,8 @@ import Section5 from './assessments/Section5';
 import Section6 from './assessments/Section6';
 import Section7 from './assessments/Section7';
 import Section8 from './assessments/Section8';
+import Section9 from './assessments/Section9';
+import Section10 from './assessments/Section10';
 
 
 const Assessment = () => {
@@ -31,6 +33,8 @@ const Assessment = () => {
     { name: 'Section 6', path: '/assessment/section6', id: 'section6' },
     { name: 'Section 7', path: '/assessment/section7', id: 'section7' },
     { name: 'Section 8', path: '/assessment/section8', id: 'section8' },
+    { name: 'Section 9', path: '/assessment/section9', id: 'section9' },
+    { name: 'Section 10', path: '/assessment/section10', id: 'section10'},
   ];
 
   // Find the index of the current page
@@ -94,6 +98,8 @@ const Assessment = () => {
             <Route path="/section6" element={<Section6 />} />
             <Route path="/section7" element={<Section7 />} />
             <Route path="/section8" element={<Section8 />} />
+            <Route path="/section9" element={<Section9 />} />
+            <Route path="/section10" element={<Section10 />} />
           </Routes>
         </div>
       </div>

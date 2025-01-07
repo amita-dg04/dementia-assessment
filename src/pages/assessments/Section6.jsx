@@ -1,36 +1,82 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Section6 = () => {
   const navigate = useNavigate();
   const [answer, setAnswer] = useState('');
   const [timeLeft, setTimeLeft] = useState(10);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [assessmentId, setAssessmentId] = useState(null);
 
+  // Get assessment ID from localStorage
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime <= 1) {
-          handleSubmit();
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
+    const id = localStorage.getItem('assessmentId');
+    if (id) {
+      setAssessmentId(parseInt(id));
+    } else {
+      console.error('Assessment ID is missing in localStorage.');
+    }
   }, []);
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    let timer;
+    if (!isSubmitted && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime <= 1) {
+            handleSubmit();
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    }
+
+    return () => clearInterval(timer);
+  }, [isSubmitted, timeLeft]);
+
+  const validateAnswer = (userAnswer) => {
+    const acceptedAnswers = ['watch', 'wristwatch'];
+    return acceptedAnswers.includes(userAnswer.toLowerCase().trim());
+  };
+
+  const handleSubmit = async () => {
+    if (isSubmitted || !assessmentId) return;
     setIsSubmitted(true);
-    setTimeout(() => {
-      navigate('/assessment/section7');
-    }, 1500);
+
+    try {
+      const userAnswer = answer.trim() || 'NO_ANSWER';
+      const isCorrect = validateAnswer(userAnswer);
+      const responseTime = (10 - timeLeft) * 1000;
+
+      const responseData = {
+        assessment_id: assessmentId,
+        section_number: 6,
+        question_number: 1,
+        user_response: userAnswer,
+        is_correct: isCorrect,
+        response_time: responseTime,
+      };
+
+      console.log('Submitting response:', responseData);
+      
+      // Send data to backend
+      const response = await axios.post('http://localhost:4000/store_section_response', responseData);
+      console.log('Response stored successfully:', response.data);
+
+      // Navigate to next section after a short delay
+      setTimeout(() => {
+        navigate('/assessment/section7');
+      }, 1500);
+
+    } catch (error) {
+      console.error('Error storing response:', error.response?.data || error.message);
+    }
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      {/* Timer */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Object Recognition</h2>
@@ -44,18 +90,17 @@ const Section6 = () => {
         </div>
       </div>
 
-      {/* Image and Question */}
       <div className="mb-8">
         <div className="flex justify-center mb-6">
           <img
-            src="/api/placeholder/300/300"
+            src="/wristwatch.jpg"
             alt="Wristwatch"
             className="rounded-lg shadow-lg mb-6"
           />
         </div>
         
         <h3 className="text-2xl font-bold mb-6">
-          What is this called?
+          What is this called? (watch your spelling!)
         </h3>
 
         <input
@@ -69,7 +114,6 @@ const Section6 = () => {
         />
       </div>
 
-      {/* Submit Button */}
       <button
         onClick={handleSubmit}
         disabled={isSubmitted || !answer.trim()}
