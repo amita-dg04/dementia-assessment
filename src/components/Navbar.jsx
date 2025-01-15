@@ -19,7 +19,7 @@ const Navbar = () => {
               <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                 <path d="M20 12H4M4 12L10 6M4 12L10 18" />
               </div>
-              <span className="ml-2 text-xl font-semibold text-gray-900">Symptomate</span>
+              <span className="ml-2 text-xl font-semibold text-gray-900">EarlyOnset</span>
             </NavLink>
           </div>
 

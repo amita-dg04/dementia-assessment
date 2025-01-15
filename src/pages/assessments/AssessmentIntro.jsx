@@ -7,16 +7,16 @@ const AssessmentIntro = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">Check your symptoms</h1>
+      <h1 className="text-3xl font-bold text-gray-900 mb-6">Check for Early Onset Dementia</h1>
       
       <div className="mb-8">
         <p className="text-gray-600 mb-4">
-          Take a short (3 min) symptom assessment. The information you give is safe and won't be shared.
+          Take a short (5 min)) assessment. The information you give is safe and won't be shared.
           Your results will include:
         </p>
         <ul className="space-y-2 mb-6">
           <li className="text-gray-700">• Possible causes of symptoms.</li>
-          <li className="text-gray-700">• Recommendations on what to do next.</li>
+          <li className="text-gray-700">• A score.</li>
         </ul>
       </div>
 
@@ -33,7 +33,7 @@ const AssessmentIntro = () => {
           </li>
           <li className="flex items-center text-gray-700">
             <Check className="w-5 h-5 text-blue-500 mr-2" />
-            Class I medical device in European Union
+            Class I medical symptom checker
           </li>
         </ul>
       </div>
@@ -56,9 +56,7 @@ const AssessmentIntro = () => {
           Certification and Compliance
         </button>
         <p className="mt-4 text-sm text-gray-600">
-          Symptomate is a registered Class I medical device in the European Union. Symptomate is a medical device 
-          regulated by the FDA as a general wellness product in the US. It is not yet a licensed medical device in other 
-          countries, in particular in Canada nor Australia. For more information about territorial use, please see our 
+          While the test has been developed by doctors and validated, the score can have errors. For more information about territorial use, please see our 
           Terms of Service.
         </p>
       </div>
