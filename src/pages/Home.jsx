@@ -9,7 +9,7 @@ const Home = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 p-8 gap-12 items-center">
                     <div>
                         <h1 className="text-4xl md:text-5xl font-serif text-gray-900 mb-4">
-                            The symptom checker
+                            The dementia checker
                             <br />
                             made by doctors for
                             <br />
@@ -65,32 +65,30 @@ const Home = () => {
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h2 className="text-3xl font-serif text-center mb-6">How does it work?</h2>
                     <p className="text-gray-600 text-center max-w-3xl mx-auto mb-12">
-                        Symptomate is very easy to use. Start by adding your symptoms. 
-                        There's no limit on how many can be added. After that, just answer a 
-                        couple of quick questions. Once that's done, you'll get feedback about 
-                        what the issue could be as well as what to do next.
+                        EarlyOnset is very easy to use. Either yourself or a loved one can use it to check for symptoms of dementia. 
+                        Once you are ready, go ahead and click "Start Interview" to begin, and have the patient answer the questions that follow.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                         {/* Step cards */}
                         <div className="bg-gray-50 p-6 rounded-lg">
-                            <h3 className="font-medium mb-2">1. Open Symptomate when you start feeling unwell</h3>
+                            <h3 className="font-medium mb-2">1. Open EarlyOnset when you believe you or a loved one need to check for dementia.</h3>
                             <img src="/api/placeholder/200/200" alt="Step 1" className="w-full" />
                         </div>
                         <div className="bg-gray-50 p-6 rounded-lg">
-                            <h3 className="font-medium mb-2">2. Select your risk factors</h3>
+                            <h3 className="font-medium mb-2">2. Input patient details</h3>
                             <img src="/api/placeholder/200/200" alt="Step 2" className="w-full" />
                         </div>
                         <div className="bg-gray-50 p-6 rounded-lg">
-                            <h3 className="font-medium mb-2">3. Add your initial symptoms</h3>
+                            <h3 className="font-medium mb-2">3. Sit in a quiet space for a 10 min assessment</h3>
                             <img src="/api/placeholder/200/200" alt="Step 3" className="w-full" />
                         </div>
                         <div className="bg-gray-50 p-6 rounded-lg">
-                            <h3 className="font-medium mb-2">4. Answer some complementary questions</h3>
+                            <h3 className="font-medium mb-2">4. Answer some questions</h3>
                             <img src="/api/placeholder/200/200" alt="Step 4" className="w-full" />
                         </div>
                         <div className="bg-gray-50 p-6 rounded-lg">
-                            <h3 className="font-medium mb-2">5. Get your conditions</h3>
+                            <h3 className="font-medium mb-2">5. Get your results</h3>
                             <img src="/api/placeholder/200/200" alt="Step 5" className="w-full" />
                         </div>
                     </div>
@@ -110,19 +108,19 @@ const Home = () => {
                                     <svg className="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    5 levels of care recommendations
+                                    point1
                                 </li>
                                 <li className="flex items-center">
                                     <svg className="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    simple language and common names
+                                    point2
                                 </li>
                                 <li className="flex items-center">
                                     <svg className="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    educational articles
+                                    point3
                                 </li>
                             </ul>
                             <img src="/api/placeholder/300/200" alt="Individuals" className="mt-6 w-full" />
@@ -135,19 +133,19 @@ const Home = () => {
                                     <svg className="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    pediatrics conditions
+                                    point1
                                 </li>
                                 <li className="flex items-center">
                                     <svg className="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    symptom pair analysis
+                                    point2
                                 </li>
                                 <li className="flex items-center">
                                     <svg className="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    body maps of children in different age groups
+                                    point3
                                 </li>
                             </ul>
                             <img src="/api/placeholder/300/200" alt="Parents" className="mt-6 w-full" />
@@ -160,13 +158,19 @@ const Home = () => {
                                     <svg className="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    third-person mode
+                                    point1
                                 </li>
                                 <li className="flex items-center">
                                     <svg className="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                                     </svg>
-                                    instructions and explanations
+                                    point2
+                                </li>
+                                <li className="flex items-center">
+                                    <svg className="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    point3
                                 </li>
                             </ul>
                             <img src="/api/placeholder/300/200" alt="Family members" className="mt-6 w-full" />
